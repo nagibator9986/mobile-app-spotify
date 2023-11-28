@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJAX с Promise</title>
+</head>
+<body>
+  <div id="result"></div>
+
+  <script>
+    function makeAjaxRequest(url) {
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            resolve(xhr.responseText);
+          } else {
+            reject('Ошибка: ' + xhr.statusText);
+          }
+        };
+
+        xhr.onerror = function() {
+          reject('Сетевая ошибка');
+        };
+
+        xhr.send();
+      });
+    }
+
+    // Вызываем функцию makeAjaxRequest и обрабатываем Promise
+    makeAjaxRequest('https://jsonplaceholder.typicode.com/todos/1')
+      .then(function(response) {
+        // Обработка успешного выполнения запроса
+        document.getElementById('result').textContent = response;
+      })
+      .catch(function(error) {
+        // Обработка ошибки
+        console.error('Ошибка при выполнении запроса:', error);
+      });
+  </script>
+</body>
+</html>
